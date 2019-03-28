@@ -1,0 +1,69 @@
+{% extends 'base.html'%}
+
+{% block title %}
+    {{ block.super }}
+{% endblock %}
+
+{% block content %}
+    <div class="container-fluid">
+        <div class="row b-height">
+            <div class="col-sm-3 text-left" id="left-block">
+
+                <div class="m-4">
+                    <a href="" class="btn-success selected"><strong>Today</strong></a>
+                    <a href="" class="mt-1"><strong>Next 7 days</strong></a>
+                    <br>
+
+                    <p style='text-decoration:underline;'><strong>Projects</strong></p>
+                    <p class="a-add-prjct"><strong>+Add project</strong></p>
+
+                    <form class="prjct-form" action="" method="post">
+                        <div>
+                            <input class="form-control" type="color" name="project-color">
+                            <input class="form-control" type="text"  name="project-name" placeholder="project name" autofocus>
+                        </div>
+                        <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
+                        <p class="prjct-frm-btn">Cancel</p>
+                    </form>
+
+                </div>
+            </div>
+
+            <div class="col-sm-6" id="center-block">
+                <div class="m-3">
+                    <h2>Today</h2>
+
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Project</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td>Mark</td>
+                            <td>Otto</td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <p class="a-add-task"><strong>+Add task</strong></p>
+
+                    <form class="task-form" action="" method="post" style="display: none;">
+                        <div>
+                            <input class="form-control" type="text"  name="project-name" placeholder="task name" autofocus>
+                            <input class="form-control" type="datetime-local">
+                        </div>
+                        <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
+                        <p class="task-frm-btn">Cancel</p>
+                    </form>
+
+                </div>
+            </div>
+            <div class="col-sm-3" id="right-block">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
