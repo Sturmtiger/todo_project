@@ -15,6 +15,13 @@
                     <br>
 
                     <p style='text-decoration:underline;'><strong>Projects</strong></p>
+                    {% for project in projects %}
+                    <div>
+                        <div class="project-circle" style="background: {{ project.colour }}"></div>
+                        {{ project.name }}
+                        <b>({{ project.task_set.count }})</b>
+                    </div>
+                    {% endfor %}
                     <p class="a-add-prjct"><strong>+Add project</strong></p>
 
                     <form class="prjct-form" action="" method="post">
@@ -41,10 +48,18 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr>
-                            <td>Mark</td>
-                            <td>Otto</td>
-                        </tr>
+                        {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    <div class="priority-square" style="background: {{ task.priority }}"></div>
+                                    {{ task.name }}
+                                </td>
+                                <td>
+                                    {{ task.project }}
+                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+                                </td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
 

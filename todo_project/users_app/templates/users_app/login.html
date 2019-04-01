@@ -4,17 +4,16 @@
 {% block title %} Log In - {{ block.super }}{% endblock %}
 
 {% block content %}
-    <!--{% if messages %}-->
-    <!--{% for message in messages %}-->
-    <!--<div class="alert-alert-{{ message.tags }}">{{ message }}</div>-->
-    <!--{% endfor %}-->
-    <!--{% endif %}-->
-
-
 
         <div class="container">
             <div class="row">
                 <div class="col-md-8 offset-2 mt-4 border border-primary rounded">
+
+                        {% if messages %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                        {% endif %}
 
                     <form method="post">
                         {% csrf_token %}
