@@ -30,13 +30,21 @@ a{
 	width: 50px;
 }
 
-.prjct-form input[type="text"], .task-form input[type="text"] {
+.prjct-form input[type="text"] {
 	width: 50%;
 }
 
-.task-form input[type="datetime-local"] {
-	width: 25%;
+
+.task-form input[name="name"] {
+	width: 40%;
 }
+.task-form select[name="priority"], .task-form select[name="project"] {
+	width: 15%;
+}
+.task-form input[name="date_until"] {
+	width: 20%;
+}
+
 
 .a-add-prjct, .a-add-task {
 	color: red;

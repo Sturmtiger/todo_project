@@ -13,21 +13,31 @@
                     <a href="" class="btn-success selected"><strong>Today</strong></a>
                     <a href="" class="mt-1"><strong>Next 7 days</strong></a>
                     <br>
-
-                    <p style='text-decoration:underline;'><strong>Projects</strong></p>
+                    <p style='text-decoration:underline;'><strong>Projects ({{ projects.count }})</strong></p>
                     {% for project in projects %}
                     <div>
                         <div class="project-circle" style="background: {{ project.colour }}"></div>
                         {{ project.name }}
                         <b>({{ project.task_set.count }})</b>
+
+                      <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="sr-only">Toggle Dropdown</span>
+                      </button>
+                      <div class="dropdown-menu">
+                          <a class="dropdown-item" href="#">Edit</a>
+                          <a class="dropdown-item" href="#">Delete</a>
+                      </div>
+
                     </div>
                     {% endfor %}
                     <p class="a-add-prjct"><strong>+Add project</strong></p>
 
-                    <form class="prjct-form" action="" method="post">
+                    <form class="prjct-form" action="{% url 'create_project_url' %}" method="post">
+                        {% csrf_token %}
                         <div>
-                            <input class="form-control" type="color" name="project-color">
-                            <input class="form-control" type="text"  name="project-name" placeholder="project name" autofocus>
+                                    {% for field in project_form %}
+                                        {{ field }}
+                                    {% endfor %}
                         </div>
                         <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
                         <p class="prjct-frm-btn">Cancel</p>
@@ -38,8 +48,7 @@
 
             <div class="col-sm-6" id="center-block">
                 <div class="m-3">
-                    <h2>Today</h2>
-
+                    <h2>Today <small>{{ today_date|date:"D d F" }}</small></h2>
                     <table class="table">
                         <thead>
                         <tr>
@@ -57,6 +66,16 @@
                                 <td>
                                     {{ task.project }}
                                     <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+
+
+                              <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu">
+                                  <a class="dropdown-item" href="#">Edit</a>
+                                  <a class="dropdown-item" href="#">Delete</a>
+                              </div>
+
                                 </td>
                             </tr>
                         {% endfor %}
@@ -65,10 +84,12 @@
 
                     <p class="a-add-task"><strong>+Add task</strong></p>
 
-                    <form class="task-form" action="" method="post" style="display: none;">
+                    <form class="task-form" action="{% url 'create_task_url' %}" method="post" style="display: none;">
+                        {% csrf_token %}
                         <div>
-                            <input class="form-control" type="text"  name="project-name" placeholder="task name" autofocus>
-                            <input class="form-control" type="datetime-local">
+                            {% for field in task_form %}
+                                {{ field }}
+                            {% endfor %}
                         </div>
                         <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
                         <p class="task-frm-btn">Cancel</p>
@@ -82,3 +103,4 @@
         </div>
     </div>
 {% endblock %}
+
