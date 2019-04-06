@@ -12,7 +12,7 @@ def gen_slug(s):
 
 
 class Project(models.Model):
-    name = models.CharField(max_length=30)
+    name = models.CharField(max_length=20)
     colour = models.CharField(max_length=7)
     slug = models.SlugField(max_length=30, unique=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -24,7 +24,10 @@ class Project(models.Model):
         self.slug = gen_slug(self.name)
         super().save(*args, **kwargs)
 
-    def get_delete_url(self):  # to complete
+    def get_absolute_url(self):
+        return reverse('project_detail_url', kwargs={'slug': self.slug})
+
+    def get_delete_url(self):
         return reverse('project_delete_url', kwargs={'slug': self.slug})
 
     def __str__(self):
@@ -32,19 +35,28 @@ class Project(models.Model):
 
 
 class Task(models.Model):
-    LOW = 'white'
-    MID = 'orange'
-    HIGH = 'red'
+    LOW = 3
+    MID = 2
+    HIGH = 1
     CHOICES_OF_PRIORITY = (
         (LOW, 'Low'),
         (MID, 'Mid'),
         (HIGH, 'High')
     )
     name = models.CharField(max_length=30)
-    priority = models.CharField(max_length=6, choices=CHOICES_OF_PRIORITY, default=LOW)
+    priority = models.PositiveSmallIntegerField(max_length=1, choices=CHOICES_OF_PRIORITY, default=LOW)
     date_until = models.DateTimeField()
     status = models.CharField(max_length=4, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)
+
+    class Meta:
+        ordering = ['priority']
+
+    def get_delete_url(self):
+        return reverse('task_delete_url', kwargs={'id': self.id})
+
+    def get_done_url(self):
+        return reverse('task_done_url', kwargs={'id': self.id})
 
     def __str__(self):
         return self.name

@@ -1,45 +1,5 @@
-{% extends 'base.html'%}
+{% extends 'todo_app/todo_base.html' %}
 
-{% block title %}
-    {{ block.super }}
+{% block center-block %}
+    {% include 'todo_app/includes/center_block_archive.html' %}
 {% endblock %}
-
-{% block content %}
-    <div class="container-fluid">
-        <div class="row b-height">
-            <div class="col-sm-3 text-left" id="left-block"></div>
-
-            <div class="col-sm-6" id="center-block">
-                <div class="m-3">
-                    <h2>Archive</h2>
-                    <table class="table">
-                        <thead>
-                        <tr>
-                            <th scope="col">Task</th>
-                            <th scope="col">Project</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for task in tasks %}
-                            <tr>
-                                <td>
-                                    <div class="priority-square" style="background: {{ task.priority }}"></div>
-                                    {{ task.name }}
-                                </td>
-                                <td>
-                                    {{ task.project }}
-                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="col-sm-3" id="right-block">
-
-            </div>
-        </div>
-    </div>
-{% endblock %}
-

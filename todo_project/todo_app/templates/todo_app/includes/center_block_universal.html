@@ -1,0 +1,65 @@
+                <div class="m-3">
+                    <h2>Today <small>{{ today_date|date:"D d F" }}</small></h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Project</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
+                                    {{ task.name }}
+                                </td>
+                                <td>
+                                    {{ task.project }}
+                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+
+
+                              <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu">
+
+                                  <a class="dropdown-item" href="#">Edit</a>
+
+                                  <form action="{{ task.get_delete_url }}" method="post">
+                                      {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Delete</button>
+                                  </form>
+
+                                  <form action="{{ task.get_done_url }}" method="post">
+                                      {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Done</button>
+                                  </form>
+
+                              </div>
+
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+<!--                    {% if messages %}-->
+<!--                    {% for message in messages %}-->
+<!--                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>-->
+<!--                    {% endfor %}-->
+<!--                    {% endif %}-->
+
+                    <p class="a-add-task"><strong>+Add task</strong></p>
+
+                    <form class="task-form" action="{% url 'create_task_url' %}" method="post" style="display: none;">
+                        {% csrf_token %}
+                        <div>
+                            {% for field in task_form %}
+                                {{ field }}
+                            {% endfor %}
+                        </div>
+                        <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
+                        <p class="task-frm-btn">Cancel</p>
+                    </form>
+                </div>

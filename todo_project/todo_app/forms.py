@@ -1,5 +1,6 @@
 from django import forms
 from .models import *
+from datetime import datetime as dt
 
 class ProjectForm(forms.ModelForm):
     class Meta:
@@ -12,13 +13,35 @@ class ProjectForm(forms.ModelForm):
 
 
 class TaskForm(forms.ModelForm):
-    # date_until = forms.DateTimeField(input_formats=['%Y-%m-%dT%H:%M'])
+    date_until = forms.DateTimeField(
+        widget=forms.DateTimeInput(attrs={
+            'class': 'form-control',
+            'type': 'datetime-local',
+            'min': dt.now().strftime('%Y-%m-%dT%H:%M'),  # realize jQuery
+            'max': dt.now().replace(year=dt.now().year+2).strftime('%Y-%m-%dT%H:%M')  # realize jQuery
+        }),
+        initial=dt.now().strftime('%Y-%m-%dT%H:%M')
+    )
+
+    def __init__(self, user=None, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if user and User.objects.get(id=user).project_set.all().exists():
+            self.fields['project'] = forms.ModelChoiceField(
+                empty_label='Choose the project',
+                queryset=User.objects.get(id=user).project_set.all(),
+                widget=forms.Select(attrs={
+                    'class': 'form-control'
+                })
+            )
+        else:
+            del self.fields['project']
+
     class Meta:
         model = Task
         fields = ['name', 'priority', 'date_until', 'project']
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'task description', 'autofocus': 'autofocus'}),
             'priority': forms.Select(attrs={'class': 'form-control'}),
-            'date_until': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
-            'project': forms.Select(attrs={'class': 'form-control'}),
+            # 'date_until': forms.DateTimeInput(attrs={'class': 'form-control', 'type': 'datetime-local'}),
+            # 'project': forms.Select(attrs={'class': 'form-control'}),
         }

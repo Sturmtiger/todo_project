@@ -17,10 +17,10 @@
 
 		<nav class="navbar navbar-dark bg-primary">
 			<a class="navbar-brand" href="{% url 'main_url' %}">TODO</a>
-			<div class="navbar-nav ml-auto">
-				<a href="{% url 'archive_url' %}" class="nav-item nav-link">Archive</a>
-			</div>
 			{% if user.is_authenticated %}
+				<div class="navbar-nav ml-auto">
+					<a href="{% url 'archive_url' %}" class="nav-item nav-link">Archive</a>
+				</div>
 				<div class="navbar-nav ml-auto mr-3">
 					<p class="navbar-nav">{{ user.username|title }}</p>
 				</div>

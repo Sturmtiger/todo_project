@@ -1,0 +1,33 @@
+                <div class="m-3">
+                    <h2>"{{ project.name }}" <small>project</small></h2>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col">Task</th>
+                            <th scope="col">Project</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for task in tasks %}
+                            <tr>
+                                <td>
+                                    <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
+                                    {{ task.name }}
+                                </td>
+                                <td>
+                                    {{ task.project }}
+                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+                                    {% if task.status %}<span><b>(Done)</b></span>{% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+
+<!--                    {% if messages %}-->
+<!--                    {% for message in messages %}-->
+<!--                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>-->
+<!--                    {% endfor %}-->
+<!--                    {% endif %}-->
+
+                </div>
