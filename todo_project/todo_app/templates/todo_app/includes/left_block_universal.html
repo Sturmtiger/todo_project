@@ -1,6 +1,6 @@
                 <div class="m-4">
-                    <a href="" class="btn-success selected"><strong>Today</strong></a>
-                    <a href="" class="mt-1"><strong>Next 7 days</strong></a>
+                    <a href="{% url 'today_url' %}" class="{% if today_obj %}btn-success selected{% endif %}"><strong>Today</strong></a>
+                    <a href="{% url 'next7days_url' %}" class="mt-1 {% if next7days_obj %}btn-success selected{% endif %}"><strong>Next 7 days</strong></a>
                     <br>
                     <p style='text-decoration:underline;'><strong>Projects ({{ projects.count }})</strong></p>
                     {% for project in projects %}
@@ -25,9 +25,13 @@
                     {% endfor %}
 
                     {% if messages %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                    {% endfor %}
+                        {% for message in messages %}
+                            {% if message.tags == 'error' %}
+                                <div class="alert alert-danger">{{ message }}</div>
+                            {% else %}
+                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
 
                     <p class="a-add-prjct"><strong>+Add project</strong></p>

@@ -44,7 +44,7 @@ class Task(models.Model):
         (HIGH, 'High')
     )
     name = models.CharField(max_length=30)
-    priority = models.PositiveSmallIntegerField(max_length=1, choices=CHOICES_OF_PRIORITY, default=LOW)
+    priority = models.PositiveSmallIntegerField(choices=CHOICES_OF_PRIORITY, default=LOW)
     date_until = models.DateTimeField()
     status = models.CharField(max_length=4, blank=True)
     project = models.ForeignKey(Project, on_delete=models.CASCADE)

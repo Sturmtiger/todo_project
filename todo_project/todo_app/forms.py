@@ -25,10 +25,10 @@ class TaskForm(forms.ModelForm):
 
     def __init__(self, user=None, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        if user and User.objects.get(id=user).project_set.all().exists():
+        if user and Project.objects.filter(user=user).exists():
             self.fields['project'] = forms.ModelChoiceField(
                 empty_label='Choose the project',
-                queryset=User.objects.get(id=user).project_set.all(),
+                queryset=Project.objects.filter(user=user),
                 widget=forms.Select(attrs={
                     'class': 'form-control'
                 })

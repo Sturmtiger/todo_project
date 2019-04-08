@@ -3,6 +3,8 @@ from .views import *
 
 urlpatterns = [
     path('', main, name='main_url'),
+    path('today/', today, name='today_url'),
+    path('next-7-days/', nextSevenDays, name='next7days_url'),
     path('archive/', archive, name='archive_url'),
     path('project/<str:slug>/detail/', projectDetail, name='project_detail_url'),
     path('project/create/', ProjectCreate.as_view(), name='create_project_url'),
