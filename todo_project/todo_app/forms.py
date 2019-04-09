@@ -1,8 +1,13 @@
 from django import forms
 from .models import *
 from datetime import datetime as dt
+from django.core.exceptions import ValidationError
 
 class ProjectForm(forms.ModelForm):
+    # def __init__(self, user=None, *args, **kwargs):
+    #     super().__init__(*args, **kwargs)
+    #     self.user = user
+
     class Meta:
         model = Project
         fields = ['colour', 'name']
@@ -10,6 +15,12 @@ class ProjectForm(forms.ModelForm):
             'colour': forms.TextInput(attrs={'class': 'form-control', 'type': 'color'}),
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'project name', 'autofocus': 'autofocus'})
         }
+
+    # def clean(self):
+    #     new_project = self.cleaned_data['name']
+    #     if Project.objects.filter(user=self.user, name__iexact=new_project).count():
+    #         raise ValidationError('Project name must be unique!')
+    #     return new_project
 
 
 class TaskForm(forms.ModelForm):

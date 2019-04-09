@@ -19,7 +19,7 @@ def today(request):
     if request.user.is_authenticated:
         # today_date = datetime.today().strftime("%a, %d %B")
         project_form = ProjectForm()
-        task_form = TaskForm(user=request.user)
+        task_form = TaskForm(request.user)
         projects = Project.objects.filter(user=request.user)
         overdue_tasks = Task.objects.filter(project__user=request.user,
                                             date_until__lt=timezone.now(),
@@ -55,7 +55,7 @@ def nextSevenDays(request):
 
         context = {
             'next7days_obj': True,
-            'title': 'Today',
+            'title': 'Next 7 days',
             'today_date': datetime.now(),
             'projects': projects,
             'tasks': tasks,
@@ -72,7 +72,7 @@ def projectDetail(request, slug):
     project = user.project_set.get(slug=slug)
     tasks = project.task_set.all()
     context = {
-        'title' : project.name,
+        'title': project.name + ' PROJECT',
         'project': project,
         'tasks': tasks}
     return render(request, 'todo_app/project.html', context=context)
@@ -82,13 +82,19 @@ def archive(request):
     user = User.objects.get(id=request.user.id)
     projects = user.project_set.all()
     tasks = [task for project in projects for task in project.task_set.filter(status='done')]
-    return render(request, 'todo_app/archive.html', context={'tasks': tasks, 'title': 'Archive'})
+    context = {
+        'tasks': tasks,
+        'title': 'Archive'
+    }
+    return render(request, 'todo_app/archive.html', context=context)
 
 
 class ProjectCreate(View):
     def post(self, request):
         bound_form = ProjectForm(request.POST)
-
+        print(request.POST)
+        print(bound_form.is_valid())
+        print(bound_form.errors)
         if bound_form.is_valid():
             new_project = bound_form.save(commit=False)
             new_project.user = User.objects.get(id=request.user.id)
@@ -133,9 +139,57 @@ def taskDelete(request, id):
         messages.success(request, f'Task <b>"{task.name}"</b> has been deleted successfully!')
         return redirect('main_url', permanent=True)
 
+
 def taskDone(request, id):
     if request.method == 'POST':
         task = Task.objects.get(id=id)
         task.status = 'done'
         task.save()
         return redirect('main_url', permanent=True)
+
+
+class projectUpdate(View):
+    def get(self, request, slug):
+        project = Project.objects.get(slug=slug)
+        bound_form = ProjectForm(instance=project)
+        context = {
+            'project': f'"{project.name}" Project Edit',
+            'form': bound_form
+        }
+        return render(request, 'todo_app/update_universal.html', context=context)
+
+    def post(self, request, slug):
+        project = Project.objects.get(slug=slug)
+        bound_form = ProjectForm(request.user, post, instance=project)
+        if bound_form.is_valid():
+            bound_form.save()
+            return redirect('main_url')
+        context = {
+            'project': project.name,
+            'form': bound_form
+        }
+        return render(request, 'todo_app/update_universal.html', context=context)
+
+class taskUpdate(View):
+    def get(self, request, id):
+        task = Task.objects.get(id=id)
+        bound_form = TaskForm(request.user, instance=task)
+        context = {
+            'project': f'"{task.name}" Task Edit',
+            'form': bound_form
+        }
+        return render(request, 'todo_app/update_universal.html', context=context)
+
+    def post(self, request, id):
+        post = request.POST.copy()
+        post['date_until'] = post.get('date_until').replace('T', ' ')
+        task = Task.objects.get(id=id)
+        bound_form = TaskForm(request.user, post, instance=task)
+        if bound_form.is_valid():
+            bound_form.save()
+            return redirect('main_url')
+        context = {
+            'project': f'"{task.name}" Project Edit',
+            'form': bound_form
+        }
+        return render(request, 'todo_app/update_universal.html', context=context)

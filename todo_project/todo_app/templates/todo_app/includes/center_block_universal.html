@@ -29,7 +29,7 @@
                                   </button>
                                   <div class="dropdown-menu">
 
-                                      <a class="dropdown-item" href="#">Edit</a>
+                                      <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
 
                                       <form action="{{ task.get_delete_url }}" method="post">
                                           {% csrf_token %}
@@ -65,7 +65,7 @@
                               </button>
                               <div class="dropdown-menu">
 
-                                  <a class="dropdown-item" href="#">Edit</a>
+                                  <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
 
                                   <form action="{{ task.get_delete_url }}" method="post">
                                       {% csrf_token %}
