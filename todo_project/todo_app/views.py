@@ -111,6 +111,7 @@ class ProjectCreate(LoginRequiredMixin, View):
             new_project = bound_form.save(commit=False)
             new_project.user = User.objects.get(id=request.user.id)
             new_project.save()
+            messages.success(request, f'Project "{new_project.name}" has been created successfully!')
             return redirect('main_url', permanent=True)
 
         return redirect('main_url', permanent=True)
@@ -123,6 +124,7 @@ class TaskCreate(LoginRequiredMixin, View):
         bound_form = TaskForm(request.user, post)
         if bound_form.is_valid():
             new_task = bound_form.save()
+            messages.success(request, f'Task "{new_task.name}" has been created successfully!')
             return redirect('main_url', permanent=True)
 
         return redirect('main_url', permanent=True)
