@@ -1,4 +1,5 @@
 {% load static %}
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -22,7 +23,7 @@
 					<a href="{% url 'archive_url' %}" class="nav-item nav-link">Archive</a>
 				</div>
 				<div class="navbar-nav ml-auto mr-3">
-					<p class="navbar-nav">User: {{ user.username }}</p>
+					<p class="navbar-nav"><i class="fas fa-user">{{ user.username }}</i></p>
 				</div>
 				<div class="navbar-nav">
 					<a href="{% url 'logout_url' %}" class="nav-item nav-link">Log Out</a>

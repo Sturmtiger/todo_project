@@ -55,12 +55,6 @@ a{
 	display: inline;
 }
 
-.selected {
-	border-radius: 15%;
-	border: 2px black solid;
-	display: inline-block;
-}
-
 .priority-square {
 	width: 15px;
 	height: 15px;
@@ -75,3 +69,4 @@ a{
 	border: 1px solid black;
 	border-radius: 100%;
 }
+

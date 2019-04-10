@@ -8,6 +8,8 @@
                         </tr>
                         </thead>
                         <tbody>
+
+                        {% if tasks %}
                         {% for task in tasks %}
                             <tr>
                                 <td>
@@ -17,17 +19,32 @@
                                 <td>
                                     {{ task.project }}
                                     <div class="project-circle" style="background: {{ task.project.colour }}"></div>
-                                    {% if task.status %}<span><b>(Done)</b></span>{% endif %}
+
+
+                              <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" >
+                                <span class="sr-only">Toggle Dropdown</span>
+                              </button>
+                              <div class="dropdown-menu">
+
+                                  <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
+
+                                  <form action="{{ task.get_delete_url }}" method="post">
+                                      {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Delete</button>
+                                  </form>
+                                  {% if not task.status %}
+                                  <form action="{{ task.get_done_url }}" method="post">
+                                      {% csrf_token %}
+                                    <button class="dropdown-item" type="submit">Done</button>
+                                  </form>
+                                  {% endif %}
+                              </div>
+                                    {% if task.status %}<b style="color: green">(Done)</b> {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}
+                        {% endif %}
                         </tbody>
                     </table>
-
-<!--                    {% if messages %}-->
-<!--                    {% for message in messages %}-->
-<!--                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>-->
-<!--                    {% endfor %}-->
-<!--                    {% endif %}-->
 
                 </div>

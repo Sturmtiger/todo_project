@@ -1,14 +1,11 @@
                 <div class="m-4">
-                    <a href="{% url 'today_url' %}" class="{% if today_obj %}btn-success selected{% endif %}"><strong>Today</strong></a>
-                    <a href="{% url 'next7days_url' %}" class="mt-1 {% if next7days_obj %}btn-success selected{% endif %}"><strong>Next 7 days</strong></a>
-                    <br>
-                    <p style='text-decoration:underline;'><strong>Projects ({{ projects.count }})</strong></p>
+                    <a href="{% url 'today_url' %}" class="{% if today_obj %}btn btn-info{% endif %}"><strong>Today</strong> {% if today_obj %}<b>({{ tasks.count }})</b>{% endif %}</a>
+                    <a href="{% url 'next7days_url' %}" class="mt-1 {% if next7days_obj %}btn btn-info{% endif %}"><strong>Next 7 days</strong> {% if next7days_obj %}({{ tasks.count }}){% endif %}</a>
+                    <p class="mt-2" style='text-decoration:underline;'><strong>Projects</strong></p>
                     {% for project in projects %}
                         <div>
                             <div class="project-circle" style="background: {{ project.colour }}"></div>
-                            <a href="{{ project.get_absolute_url }}" class="d-inline">{{ project.name }} </a>
-                            <b>({{ project.task_set.count }})</b>
-
+                            <a href="{{ project.get_absolute_url }}" class="d-inline {% if project.slug == slug %}btn btn-info{% endif %}">{{ project.name }} {% if today_obj or next7days_obj %}<b>({{ tasks_counted|get_item:project.name }})</b>{% endif %}</a>
                           <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
@@ -22,27 +19,18 @@
 
                         </div>
                     {% endfor %}
+                    {% if today_obj %}
+                        <p class="a-add-prjct"><strong>+Add project</strong></p>
 
-                    {% if messages %}
-                        {% for message in messages %}
-                            {% if message.tags == 'error' %}
-                                <div class="alert alert-danger">{{ message }}</div>
-                            {% else %}
-                                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
-                            {% endif %}
-                        {% endfor %}
+                        <form class="prjct-form" action="{% url 'create_project_url' %}" method="post">
+                            {% csrf_token %}
+                            <div>
+                                {% for field in project_form %}
+                                    {{ field }}
+                                {% endfor %}
+                            </div>
+                            <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
+                            <p class="prjct-frm-btn">Cancel</p>
+                        </form>
                     {% endif %}
-
-                    <p class="a-add-prjct"><strong>+Add project</strong></p>
-
-                    <form class="prjct-form" action="{% url 'create_project_url' %}" method="post">
-                        {% csrf_token %}
-                        <div>
-                            {% for field in project_form %}
-                            {{ field }}
-                            {% endfor %}
-                        </div>
-                        <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
-                        <p class="prjct-frm-btn">Cancel</p>
-                    </form>
                 </div>
