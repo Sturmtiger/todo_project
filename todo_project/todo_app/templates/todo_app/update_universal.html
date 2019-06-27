@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags %}
 
-{% block title %}{{ project }} - {{ block.super }}{% endblock %}
+{% block title %}{{ title }} - {{ block.super }}{% endblock %}
 
 {% block content %}
 
@@ -23,7 +23,7 @@
                         </fieldset>
                         <div class="form-group">
                             <button class="btn btn-outline-primary" type="submit">Update</button>
-                            <a href="{% url 'today_url' %}" class="d-inline">Cancel</a>
+                            <a href="{{ redirect_url }}" class="d-inline">Cancel</a>
                         </div>
                     </form>
                     <div class="border-top pt-3">

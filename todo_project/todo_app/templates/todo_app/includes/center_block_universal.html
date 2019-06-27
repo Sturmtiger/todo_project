@@ -13,16 +13,54 @@
                         </thead>
                         <tbody>
                         {% if overdue_tasks %}
-                        {% for task in overdue_tasks %}
-                            <tr>
-                                <td>
-                                    <b style="color: red;">!!!</b>
-                                    <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
-                                    {{ task.name }}
-                                </td>
-                                <td>
-                                    {{ task.project }}
-                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+                            {% for task in overdue_tasks %}
+                                <tr>
+                                    <td>
+                                        <b style="color: red;">!!!</b>
+                                        <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
+                                        {{ task.name }}
+                                    </td>
+                                    <td>
+                                        {{ task.project }}
+                                        <div class="project-circle" style="background: {{ task.project.colour }}"></div>
+
+
+                                      <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                        <span class="sr-only">Toggle Dropdown</span>
+                                      </button>
+                                      <div class="dropdown-menu">
+
+                                          <!--<a class="dropdown-item" href="{# {{ task.get_update_url }} #}">Edit</a>-->
+                                          <a class="dropdown-item" href="{% url 'task_update_url' id=task.id redirect_url=redirect_url %}">Edit</a>
+
+                                          <!--<form action="{# {{ task.get_delete_url }} #}" method="post">-->
+                                          <form action="{% url 'task_delete_url' id=task.id redirect_url=redirect_url %}" method="post">
+                                              {% csrf_token %}
+                                            <button class="dropdown-item" type="submit">Delete</button>
+                                          </form>
+
+                                          <!--<form action="{# {{ task.get_done_url }} #}" method="post">-->
+                                          <form action="{% url 'task_done_url' id=task.id redirect_url=redirect_url %}" method="post">
+                                              {% csrf_token %}
+                                            <button class="dropdown-item" type="submit">Done</button>
+                                          </form>
+
+                                      </div>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        {% endif %}
+
+                        {% if tasks %}
+                            {% for task in tasks %}
+                                <tr>
+                                    <td>
+                                        <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
+                                        {{ task.name }}
+                                    </td>
+                                    <td>
+                                        {{ task.project }}
+                                        <div class="project-circle" style="background: {{ task.project.colour }}"></div>
 
 
                                   <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -30,74 +68,51 @@
                                   </button>
                                   <div class="dropdown-menu">
 
-                                      <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
-
-                                      <form action="{{ task.get_delete_url }}" method="post">
+                                      <!--<a class="dropdown-item" href="{# {{ task.get_update_url }} #}">Edit</a>-->
+                                        <a class="dropdown-item" href="{% url 'task_update_url' id=task.id redirect_url=redirect_url %}">Edit</a>
+                                      <!--<form action="{# {{ task.get_delete_url }} #}" method="post">-->
+                                      <form action="{% url 'task_delete_url' id=task.id redirect_url=redirect_url %}" method="post">
                                           {% csrf_token %}
-                                        <button class="dropdown-item" type="submit">Delete</button>
+                                        <button class="dropdown-item" type="submit" name="task_delete_submit">Delete</button>
                                       </form>
 
-                                      <form action="{{ task.get_done_url }}" method="post">
+                                      <!--<form action="{# {{ task.get_done_url }} #}" method="post">-->
+                                      <form action="{% url 'task_done_url' id=task.id redirect_url=redirect_url %}" method="post">
                                           {% csrf_token %}
-                                        <button class="dropdown-item" type="submit">Done</button>
+                                        <button class="dropdown-item" type="submit" name="task_done_submit">Done</button>
                                       </form>
 
                                   </div>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        {% endif %}
 
-                        {% if tasks %}
-                        {% for task in tasks %}
-                            <tr>
-                                <td>
-                                    <div class="priority-square" style="background:{% if task.priority == 1 %}red{% elif task.priority == 2 %}orange{% elif task.priority == 3 %}white{% endif %}"></div>
-                                    {{ task.name }}
-                                </td>
-                                <td>
-                                    {{ task.project }}
-                                    <div class="project-circle" style="background: {{ task.project.colour }}"></div>
-
-
-                              <button type="button" class="btn btn-sm btn-secondary dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                <span class="sr-only">Toggle Dropdown</span>
-                              </button>
-                              <div class="dropdown-menu">
-
-                                  <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
-
-                                  <form action="{{ task.get_delete_url }}" method="post">
-                                      {% csrf_token %}
-                                    <button class="dropdown-item" type="submit">Delete</button>
-                                  </form>
-
-                                  <form action="{{ task.get_done_url }}" method="post">
-                                      {% csrf_token %}
-                                    <button class="dropdown-item" type="submit">Done</button>
-                                  </form>
-
-                              </div>
-
-                                </td>
-                            </tr>
-                        {% endfor %}
+                                    </td>
+                                </tr>
+                            {% endfor %}
                         {% endif %}
                         </tbody>
                     </table>
-                    {% if today_obj %}
+                    {% if today_obj or next7days_obj %}
                         <p class="a-add-task"><strong>+Add task</strong></p>
 
-                        <form class="task-form" action="{% url 'create_task_url' %}" method="post" style="display: none;">
-                            {% csrf_token %}
-                            <div>
+                        <form class="task-form" method="post">
+                                {% csrf_token %}
+                                <div>
+                                    {% for field in task_form %}
+                                        {{ field }}
+                                    {% endfor %}
+                                </div>
+                                <button class="btn btn-primary prjct-frm-btn" type="submit" name="task_create_submit">Add</button>
+                                <p class="task-frm-btn">Cancel</p>
+                        </form>
+
+                        {% if task_form.errors %}
+                            <div class="alert alert-danger">
                                 {% for field in task_form %}
-                                    {{ field }}
+                                    {% if field.errors %}
+                                        {{ field.errors }}
+                                    {% endif %}
                                 {% endfor %}
                             </div>
-                            <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
-                            <p class="task-frm-btn">Cancel</p>
-                        </form>
+                        {% endif %}
 
                         {% if messages %}
                             {% for message in messages %}

@@ -30,20 +30,22 @@ a{
 	width: 50px;
 }
 
-.prjct-form input[type="text"] {
-	width: 50%;
-}
+/*.prjct-form input[type="text"] {*/
+	/*width: 50%;*/
+/*}*/
 
-
-.task-form input[name="name"] {
-	width: 40%;
+.task-form {
+	display: none;
 }
-.task-form select[name="priority"] {
-	width: 10%;
-}
-.task-form select[name="project"], .task-form input[name="date_until"] {
-	width: 25%;
-	}
+/*.task-form input[name="name"] {*/
+	/*width: 40%;*/
+/*}*/
+/*.task-form select[name="priority"] {*/
+	/*width: 10%;*/
+/*}*/
+/*.task-form select[name="project"], .task-form input[name="date_until"] {*/
+	/*width: 25%;*/
+	/*}*/
 
 .a-add-prjct, .a-add-task {
 	color: red;

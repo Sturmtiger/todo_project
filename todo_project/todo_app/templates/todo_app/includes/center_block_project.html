@@ -26,14 +26,14 @@
                               </button>
                               <div class="dropdown-menu">
 
-                                  <a class="dropdown-item" href="{{ task.get_update_url }}">Edit</a>
-
-                                  <form action="{{ task.get_delete_url }}" method="post">
+                                  <!--<a class="dropdown-item" href="{# {{ task.get_update_url }} #}">Edit</a>-->
+                                  <a class="dropdown-item" href="{% url 'task_update_url' id=task.id redirect_url=redirect_url %}">Edit</a>
+                                  <form action="{% url 'task_delete_url' id=task.id redirect_url=redirect_url %}" method="post">
                                       {% csrf_token %}
                                     <button class="dropdown-item" type="submit">Delete</button>
                                   </form>
                                   {% if not task.status %}
-                                  <form action="{{ task.get_done_url }}" method="post">
+                                  <form action="{% url 'task_done_url' id=task.id redirect_url=redirect_url %}" method="post">
                                       {% csrf_token %}
                                     <button class="dropdown-item" type="submit">Done</button>
                                   </form>
@@ -46,5 +46,15 @@
                         {% endif %}
                         </tbody>
                     </table>
+
+                        {% if messages %}
+                            {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                    <div class="alert alert-danger">{{ message }}</div>
+                                {% else %}
+                                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
 
                 </div>

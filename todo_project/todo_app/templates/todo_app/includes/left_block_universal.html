@@ -10,27 +10,37 @@
                             <span class="sr-only">Toggle Dropdown</span>
                           </button>
                           <div class="dropdown-menu">
-                              <a class="dropdown-item" href="{{ project.get_update_url }}">Edit</a>
-                              <form action="{{ project.get_delete_url }}" method="post">
+                              <!--<a class="dropdown-item" href="{# {{ project.get_update_url }} #}">Edit</a>-->
+                              <a class="dropdown-item" href="{% url 'project_update_url' slug=project.slug redirect_url=redirect_url %}">Edit</a>
+                              <form action="{% url 'project_delete_url' slug=project.slug redirect_url=redirect_url %}" method="post">
                                   {% csrf_token %}
-                                  <button class="dropdown-item" type="submit">Delete</button>
+                                  <button class="dropdown-item" type="submit" name="project_delete_submit">Delete</button>
                               </form>
                           </div>
 
                         </div>
                     {% endfor %}
-                    {% if today_obj %}
+                    {% if today_obj or next7days_obj %}
                         <p class="a-add-prjct"><strong>+Add project</strong></p>
 
-                        <form class="prjct-form" action="{% url 'create_project_url' %}" method="post">
+                        <form class="prjct-form" method="post">
                             {% csrf_token %}
                             <div>
                                 {% for field in project_form %}
                                     {{ field }}
                                 {% endfor %}
                             </div>
-                            <button class="btn btn-primary prjct-frm-btn" type="submit">Add</button>
+                            <button class="btn btn-primary prjct-frm-btn" type="submit" name="project_create_submit">Add</button>
                             <p class="prjct-frm-btn">Cancel</p>
                         </form>
+                            {% if project_form.errors %}
+                                <div class="alert alert-danger">
+                                    {% for field in project_form %}
+                                        {% if field.errors %}
+                                            {{ field.errors }}
+                                        {% endif %}
+                                    {% endfor %}
+                                </div>
+                            {% endif %}
                     {% endif %}
                 </div>

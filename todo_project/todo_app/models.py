@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.utils.text import slugify
 from time import time
 from django.shortcuts import reverse
+from django.db import connection
 # Create your models here.
 
 
@@ -27,12 +28,6 @@ class Project(models.Model):
     def get_absolute_url(self):
         return reverse('project_detail_url', kwargs={'slug': self.slug})
 
-    def get_delete_url(self):
-        return reverse('project_delete_url', kwargs={'slug': self.slug})
-
-    def get_update_url(self):
-        return reverse('project_update_url', kwargs={'slug': self.slug})
-
     def __str__(self):
         return self.name
 
@@ -54,15 +49,6 @@ class Task(models.Model):
 
     class Meta:
         ordering = ['priority']
-
-    def get_delete_url(self):
-        return reverse('task_delete_url', kwargs={'id': self.id})
-
-    def get_update_url(self):
-        return reverse('task_update_url', kwargs={'id': self.id})
-
-    def get_done_url(self):
-        return reverse('task_done_url', kwargs={'id': self.id})
 
     def __str__(self):
         return self.name
