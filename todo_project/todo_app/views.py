@@ -25,9 +25,9 @@ def main(request):
 class Today(LoginRequiredMixin, ObjectCreateMixin, View):
     redirect_url = 'today_url'
 
-    def get(self, request):
-        project_form = ProjectForm()
-        task_form = TaskForm(request.user)
+    def context_method(self, request, project_bound_form=None, task_bound_form=None):
+        project_form = ProjectForm() if project_bound_form is None else project_bound_form
+        task_form = TaskForm(request.user) if task_bound_form is None else task_bound_form
         projects = Project.objects.filter(user=request.user)
         overdue_tasks = Task.objects.filter(project__user=request.user,
                                             date_until__lt=timezone.localtime(),
@@ -41,7 +41,6 @@ class Today(LoginRequiredMixin, ObjectCreateMixin, View):
                                                                                                             minute=59,
                                                                                                             second=59),
                                                                status='').count() for project in projects}
-
         context = {
             'today_obj': True,
             'redirect_url': self.redirect_url,
@@ -54,15 +53,18 @@ class Today(LoginRequiredMixin, ObjectCreateMixin, View):
             'project_form': project_form,
             'task_form': task_form,
         }
-        return render(request, 'todo_app/main.html', context=context)
+        return context
+
+    def get(self, request):
+        return render(request, 'todo_app/main.html', context=self.context_method(request))
 
 
 class NextSevenDays(LoginRequiredMixin, ObjectCreateMixin, View):
     redirect_url = 'next7days_url'
 
-    def get(self, request):
-        project_form = ProjectForm()
-        task_form = TaskForm(user=request.user)
+    def context_method(self, request, project_bound_form=None, task_bound_form=None):
+        project_form = ProjectForm() if project_bound_form is None else project_bound_form
+        task_form = TaskForm(user=request.user) if task_bound_form is None else task_bound_form
         projects = Project.objects.filter(user=request.user)
         tasks = Task.objects.filter(project__user=request.user,
                                     date_until__gt=timezone.localtime().replace(hour=23,
@@ -90,7 +92,10 @@ class NextSevenDays(LoginRequiredMixin, ObjectCreateMixin, View):
             'project_form': project_form,
             'task_form': task_form,
         }
-        return render(request, 'todo_app/main.html', context=context)
+        return context
+
+    def get(self, request):
+        return render(request, 'todo_app/main.html', context=self.context_method(request))
 
 
 @login_required

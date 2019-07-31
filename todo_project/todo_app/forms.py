@@ -36,7 +36,7 @@ class TaskForm(forms.ModelForm):
             'class': 'form-control',
             'type': 'datetime-local',
             'min': timezone.localtime().strftime('%Y-%m-%dT00:00'),
-            'max': timezone.now().replace(year=timezone.localtime().year+2, day=timezone.localtime().day+1).strftime('%Y-%m-%dT00:00')  # until 2 years
+            'max': (timezone.now().replace(year=timezone.localtime().year+2)+timezone.timedelta(days=1)).strftime('%Y-%m-%dT00:00')  # until 2 years
         }),
         initial=timezone.now().strftime('%Y-%m-%dT00:00')
     )
